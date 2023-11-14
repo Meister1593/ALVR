@@ -16,7 +16,7 @@
 // Note: We can't clone the underlying socket for each StreamSender and the mutex around the socket
 // cannot be removed. This is because we need to make sure at least shards are written whole.
 
-use crate::backend::{tcp, udp, SocketReader, SocketWriter};
+use crate::backend::{tcp, udp, SocketReader, SocketWriter, usb::UsbSocket};
 use alvr_common::{
     anyhow::Result, debug, parking_lot::Mutex, AnyhowToCon, ConResult, HandleTryAgain, ToCon,
 };
@@ -264,6 +264,7 @@ impl<H: DeserializeOwned + Serialize> StreamReceiver<H> {
 pub enum StreamSocketBuilder {
     Tcp(TcpListener),
     Udp(UdpSocket),
+    Usb(UsbSocket),
 }
 
 impl StreamSocketBuilder {
@@ -284,6 +285,20 @@ impl StreamSocketBuilder {
                 send_buffer_bytes,
                 recv_buffer_bytes,
             )?),
+            SocketProtocol::Usb => {
+                for device in rusb::devices().unwrap().iter() {
+                    let device_desc = device.device_descriptor().unwrap();
+
+                    println!(
+                        "Bus {:03} Device {:03} ID {:04x}:{:04x}",
+                        device.bus_number(),
+                        device.address(),
+                        device_desc.vendor_id(),
+                        device_desc.product_id()
+                    );
+                }
+                StreamSocketBuilder::Usb()
+            }
         })
     }
 
@@ -330,6 +345,7 @@ impl StreamSocketBuilder {
         send_buffer_bytes: SocketBufferSize,
         recv_buffer_bytes: SocketBufferSize,
         max_packet_size: usize,
+        client_descriptor: rusb::DeviceDescriptor,
     ) -> ConResult<StreamSocket> {
         let (send_socket, receive_socket): (Box<dyn SocketWriter>, Box<dyn SocketReader>) =
             match protocol {
@@ -350,6 +366,15 @@ impl StreamSocketBuilder {
                     )?;
 
                     (Box::new(send_socket), Box::new(receive_socket))
+                }
+                SocketProtocol::Usb => {
+                    println!(
+                        "Bus {:03} Device {:03} ID {:04x}:{:04x}",
+                        client_descriptor.bus_number(),
+                        client_descriptor.address(),
+                        client_descriptor.vendor_id(),
+                        client_descriptor.product_id()
+                    );
                 }
             };
 

@@ -1,5 +1,6 @@
 pub mod tcp;
 pub mod udp;
+pub mod usb;
 
 use alvr_common::{anyhow::Result, ConResult};
 

@@ -884,6 +884,8 @@ pub enum SocketProtocol {
     Udp,
     #[schema(strings(display_name = "TCP"))]
     Tcp,
+    #[schema(strings(display_name = "USB"))]
+    Usb,
 }
 
 #[derive(SettingsSchema, Serialize, Deserialize, Clone)]

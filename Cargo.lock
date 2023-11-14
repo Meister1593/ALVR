@@ -201,6 +201,7 @@ dependencies = [
  "ndk-sys 0.5.0+25.2.9519653",
  "oboe",
  "rand",
+ "rusb",
  "serde",
  "serde_json",
  "walkdir",
@@ -247,6 +248,7 @@ dependencies = [
  "once_cell",
  "parking_lot",
  "rfd",
+ "rusb",
  "semver",
  "serde",
  "settings-schema",
@@ -409,6 +411,7 @@ dependencies = [
  "alvr_common",
  "alvr_session",
  "bincode",
+ "rusb",
  "serde",
  "serde_json",
  "socket2 0.5.5",
@@ -2927,6 +2930,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "libusb1-sys"
+version = "0.6.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f9d0e2afce4245f2c9a418511e5af8718bcaf2fa408aefb259504d1a9cb25f27"
+dependencies = [
+ "cc",
+ "libc",
+ "pkg-config",
+ "vcpkg",
+]
+
+[[package]]
 name = "linux-raw-sys"
 version = "0.3.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4161,6 +4176,16 @@ checksum = "ed87390fefd18965ff20baae5aeb9913bcf82d2b59dc04c0f6d8f17f7be56ff2"
 dependencies = [
  "cc",
  "which",
+]
+
+[[package]]
+name = "rusb"
+version = "0.9.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "45fff149b6033f25e825cbb7b2c625a11ee8e6dac09264d49beb125e39aa97bf"
+dependencies = [
+ "libc",
+ "libusb1-sys",
 ]
 
 [[package]]
