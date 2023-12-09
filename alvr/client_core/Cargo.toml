@@ -27,11 +27,7 @@ rand = "0.8"
 serde = "1"
 serde_json = "1"
 jni = "0.21"
-<<<<<<< Updated upstream
-rusb = "0.9"
-=======
 rusb = { version = "0.9",features = ["vendored"] }
->>>>>>> Stashed changes
 
 [target.'cfg(target_os = "android")'.dependencies]
 android_logger = "0.13"
