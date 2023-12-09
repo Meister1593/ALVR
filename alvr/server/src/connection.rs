@@ -223,6 +223,17 @@ pub fn handshake_loop() {
             }
             manual_client_ips
         };
+        warn!("Started checking ips");
+        for device in rusb::devices().unwrap().iter() {
+            let device_desc = device.device_descriptor().unwrap();
+    
+            warn!("Bus {:03} Device {:03} ID {:04x}:{:04x}",
+                device.bus_number(),
+                device.address(),
+                device_desc.vendor_id(),
+                device_desc.product_id());
+        }
+        warn!("Ended checking ips");
 
         if !available_manual_client_ips.is_empty()
             && try_connect(available_manual_client_ips).is_ok()

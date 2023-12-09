@@ -2,7 +2,7 @@ mod decoder;
 
 pub use decoder::*;
 
-use alvr_common::OptLazy;
+use alvr_common::{warn, OptLazy};
 use jni::{
     objects::{GlobalRef, JObject},
     sys::jobject,
@@ -107,6 +107,29 @@ fn get_system_service<'a>(env: &mut JNIEnv<'a>, service_name: &str) -> JObject<'
     .unwrap()
     .l()
     .unwrap()
+}
+
+pub fn get_usb_devices_fd() {
+    let vm = vm();
+    let mut env = vm.attach_current_thread().unwrap();
+
+    let usb_service = get_system_service(&mut env, "usb");
+
+    let accessories_list_uncasted = env
+        .call_method(
+            usb_service,
+            "getAccessoryList",
+            "()[Landroid/hardware/usb/UsbAccessory;",
+            &[],
+        )
+        .unwrap()
+        .l()
+        .unwrap();
+    let mut iterator = accessory_list.iter();
+    while let Some((key, _value)) = iterator.next(&mut env).unwrap() {
+        let str: String = env.get_string(&key.into()).unwrap().into();
+        warn!("device: {str}")
+    }
 }
 
 // Note: tried and failed to use libc

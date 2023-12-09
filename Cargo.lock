@@ -367,6 +367,7 @@ dependencies = [
  "pkg-config",
  "reqwest",
  "rosc",
+ "rusb",
  "serde",
  "serde_json",
  "sysinfo",

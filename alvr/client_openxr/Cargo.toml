@@ -56,6 +56,19 @@ required = true
 opengles_version = [3, 1]
 required = true
 
+# USB support
+[[package.metadata.android.uses_permission]]
+name = "android.hardware.usb.host"
+[[package.metadata.android.uses_feature]]
+name = "android.hardware.usb.host"
+required = true
+[[package.metadata.android.uses_feature]]
+name = "android.hardware.usb.accessory"
+required = true
+[[package.metadata.android.uses_feature]]
+name = "android.permission.HARDWARE_TEST"
+required = true
+
 [[package.metadata.android.uses_permission]]
 name = "android.permission.ACCESS_WIFI_STATE"
 [[package.metadata.android.uses_permission]]
@@ -87,7 +100,13 @@ launch_mode = "singleTask"
 orientation = "landscape"
 
 [[package.metadata.android.application.activity.intent_filter]]
-actions = ["android.intent.action.MAIN"]
+actions = [
+    "android.intent.action.MAIN",
+    # USB support
+    "android.hardware.usb.action.ACTION_USB_PERMISSION",
+    "android.hardware.usb.action.USB_DEVICE_ATTACHED",
+    "android.hardware.usb.action.USB_ACCESSORY_DETACHED"
+    ]
 categories = [
     "android.intent.category.LAUNCHER",
     "com.oculus.intent.category.VR",

@@ -124,6 +124,18 @@ fn connection_pipeline(
     recommended_view_resolution: UVec2,
     supported_refresh_rates: Vec<f32>,
 ) -> ConResult {
+    warn!("Started checking ips CLIENT");
+    platform::get_usb_devices_fd();    
+    // for device in rusb::devices().unwrap().iter() {
+    //     let device_desc = device.device_descriptor().unwrap();
+
+    //     warn!("Bus {:03} Device {:03} ID {:04x}:{:04x}",
+    //         device.bus_number(),
+    //         device.address(),
+    //         device_desc.vendor_id(),
+    //         device_desc.product_id());
+    // }
+    warn!("Ended checking ips CLIENT");
     let (mut proto_control_socket, server_ip) = {
         let config = Config::load();
         let announcer_socket = AnnouncerSocket::new(&config.hostname).to_con()?;
