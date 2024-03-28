@@ -137,18 +137,14 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install libfuse2 build-essential pkg-config nasm libva-dev libdrm-dev libvulkan-dev libx264-dev libx265-dev cmake libasound2-dev libjack-jackd2-dev libxrandr-dev libunwind-dev libffmpeg-nvenc-dev nvidia-cuda-toolkit libgtk-3-dev
-          git clone https://github.com/FFmpeg/nv-codec-headers.git
-          cd nv-codec-headers/
-          sudo make install
-          cd ..
           cp alvr/xtask/deb/cuda.pc /usr/share/pkgconfig
-          cargo xtask prepare-deps --platform linux
+          cargo xtask prepare-deps --gpl --platform linux
 
       - name: Build and package ALVR (.tar.gz)
         id: build
         env:
           RUST_BACKTRACE: 1
-        run: cargo xtask package-streamer
+        run: cargo xtask package-streamer --gpl
 
       - name: Upload streamer for Linux
         uses: actions/upload-release-asset@v1
@@ -164,7 +160,7 @@ jobs:
         id: build_portable
         env:
           RUST_BACKTRACE: 1
-        run: cargo xtask package-streamer --appimage --zsync
+        run: cargo xtask package-streamer --gpl --appimage --zsync
 
       - name: Upload portable streamer for Linux
         uses: actions/upload-release-asset@v1
