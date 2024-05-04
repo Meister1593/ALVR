@@ -1,3 +1,4 @@
 [submodule "openvr"]
+	shallow = true
 	path = openvr
 	url = https://github.com/ValveSoftware/openvr.git
